@@ -1,0 +1,8 @@
+services:
+  slides-dash:
+    build: .
+    container_name: slides-container
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app

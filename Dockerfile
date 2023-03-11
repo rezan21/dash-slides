@@ -1,10 +1,15 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.8-slim-buster
 
-ENV PYTHONUNBUFFERED True
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
+# ENV PYTHONUNBUFFERED True
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update 
+RUN pip install --upgrade pip
 
-CMD ["gunicorn", "--worker-class","gevent","--workers","2","--worker-connections=500","app:server", "-b", "0.0.0.0:8080"]
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["gunicorn", "--worker-class", "gevent", "--workers", "2", "--worker-connections=500", "app:server", "-b", "0.0.0.0:8080"]
+
